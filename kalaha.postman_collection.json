@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "14124c2d-9ecf-4345-b792-9a94e47259d1",
+		"name": "Bol.com",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "7594865"
+	},
+	"item": [
+		{
+			"name": "Kalaha - Get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be okay \", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"      pm.expect(responseJson.board.PIT_0).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_1).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_3).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_4).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_5).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_6).to.eql(0);\r",
+							"      pm.expect(responseJson.board.PIT_7).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_8).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_9).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_10).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_11).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_12).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_13).to.eql(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/get?gameID=game1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"get"
+					],
+					"query": [
+						{
+							"key": "gameID",
+							"value": "game1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Kalaha - Move",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response should be okay \", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"      pm.expect(responseJson.board.PIT_0).to.eql(0);\r",
+							"      pm.expect(responseJson.board.PIT_1).to.eql(7);\r",
+							"      pm.expect(responseJson.board.PIT_3).to.eql(7);\r",
+							"      pm.expect(responseJson.board.PIT_4).to.eql(7);\r",
+							"      pm.expect(responseJson.board.PIT_5).to.eql(7);\r",
+							"      pm.expect(responseJson.board.PIT_6).to.eql(1);\r",
+							"      pm.expect(responseJson.board.PIT_7).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_8).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_9).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_10).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_11).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_12).to.eql(6);\r",
+							"      pm.expect(responseJson.board.PIT_13).to.eql(0);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/move?move=0&player=SOUTH&gameID=game1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"move"
+					],
+					"query": [
+						{
+							"key": "move",
+							"value": "0"
+						},
+						{
+							"key": "player",
+							"value": "SOUTH"
+						},
+						{
+							"key": "player",
+							"value": "SOUTH",
+							"disabled": true
+						},
+						{
+							"key": "gameID",
+							"value": "game1"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
