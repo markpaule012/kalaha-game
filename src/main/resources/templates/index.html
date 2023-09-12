@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Allan Gatus Paule">
+    <title>Kalaha Game · M.A.G Paule</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="py-4">
+    <div class="container">
+        <!-- Trigger the modal with a button -->
+        <!-- Modal HTML embedded directly into document -->
+        <div id="ex1">
+            <form>
+                <label for="gameId">Game ID:</label><br>
+                <input type="text" id="gameId" name="gameId"><br>
+                <br/>
+                <label>Select Player:</label><br>
+                <input type="radio" id="north" name="player" value="NORTH">
+                <label for="north">NORTH</label><br>
+                <input type="radio" id="south" name="player" value="SOUTH">
+                <label for="south">SOUTH</label><br>
+                <input type="radio" id="both" name="player" value="BOTH">
+                <label for="both">BOTH (2 Players on Single Browser)</label><br>
+                <br/>
+                <button type="button" class="btn btn-primary" id="start_game" name="start_game">Start or Join Game</button>
+            </form>
+            <input type="text" id="currentPlayer" name="currentPlayer" value="SOUTH" class="d-none">
+        </div>
+        <hr class="hr"/>
+        <!-- Link to open the modal -->
+        <!--<p><a href="#ex1" rel="modal:open">Open Modal</a></p>-->
+        <div id="board" class="d-none">
+            <h2 class="text-center">North</h2>
+            <div class="row">
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_12" name="PIT_12">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_11" name="PIT_11">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_10" name="PIT_10">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_9" name="PIT_9">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_8" name="PIT_8">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_7" name="PIT_7">0</button>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="col-2 text-left">
+                    <button type="button" class="btn btn-secondary" id="PIT_13" name="PIT_13" disabled>0</button>
+                </div>
+                <div class="col-8 text-center"></div>
+                <div class="col-2 text-end">
+                    <button type="button" class="btn btn-secondary" id="PIT_6" name="PIT_6" disabled>0</button>
+                </div>
+            </div>
+            </br>
+            <div class="row">
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_0" name="PIT_0">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_1" name="PIT_1">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_2" name="PIT_2">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_3" name="PIT_3">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_4" name="PIT_4">0</button>
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" class="btn" id="PIT_5" name="PIT_5">0</button>
+                </div>
+            </div>
+            <h2 class="text-center">South</h2>
+            <hr class="hr"/>
+            <div class="text-center">Current Turn: <p id="currentTurn"></p></div>
+        </div>
+    </div>
+</body>
+<script src="js/jquery-3.7.1.min.js"></script>
+
+<script>
+
+        $(document).ready(function() {
+            $("#start_game").click(function() {
+                var gameId = $("#gameId").val();
+                var player = $('input[name="player"]:checked').val();
+                console.log('Loaded Game ID: ' + gameId);
+                console.log('Loaded Player: ' + player);
+				
+				// Validate
+				if (gameId.length === 0) {
+					alert("Please enter a game ID");
+					return;
+				}
+				if (player == null) {
+					alert("Please select a player");
+					return;
+				}
+				var player = $('input[name="player"]:checked').val();
+			    $('#currentPlayer').attr('value', player);
+                
+				// Disable Inputs and buttons
+				$('input[name=gameId]').attr("disabled",true);
+				$('input[name=player]').attr("disabled",true);
+				$('#start_game').attr("disabled",true);
+
+				// Submit
+				getGame();
+				$("#board").removeClass('d-none');
+				
+				// Auto-Refresh
+				refreshBoard();
+            });
+			
+			$("#PIT_0").click(function() { move(0); });
+			$("#PIT_1").click(function() { move(1); });
+			$("#PIT_2").click(function() { move(2); });
+			$("#PIT_3").click(function() { move(3); });
+			$("#PIT_4").click(function() { move(4); });
+			$("#PIT_5").click(function() { move(5); });
+			$("#PIT_6").click(function() { move(6); });
+			$("#PIT_7").click(function() { move(7); });
+			$("#PIT_8").click(function() { move(8); });
+			$("#PIT_9").click(function() { move(9); });
+			$("#PIT_10").click(function() { move(10); });
+			$("#PIT_11").click(function() { move(11); });
+			$("#PIT_12").click(function() { move(12); });
+			$("#PIT_13").click(function() { move(13); });
+		});
+		
+		function move(pit_id) {
+			var gameId = $("#gameId").val();
+			var player = $("#currentPlayer").val();
+			
+			// Disable Inputs and buttons
+			$.ajax({
+			  url: "api/move",
+			  type: "get", //send it through get method
+			  data: { 
+				move: pit_id, 
+				gameID: gameId,
+				player: player
+			  },
+			  success: function(response) {
+				parseResponse(response);
+			  },
+			  error: function(xhr) {
+				parseResponse(xhr.responseText);
+			  }
+			});
+		}
+		
+		function getGame() {
+		    var gameId = $("#gameId").val();
+			
+			$.ajax({
+			  url: "api/get",
+			  type: "get", //send it through get method
+			  data: { 
+				gameID: gameId
+			  },
+			  success: function(response) {
+				parseResponse(response);
+			  },
+			  error: function(xhr) {
+				parseResponse(xhr.responseText);
+			  }
+			});
+		}
+
+		function parseResponse(response) {
+		    var data = JSON.parse(JSON.stringify(response));
+			if (data.error === null) {
+				$('#PIT_0').html(data.board.PIT_0);
+				$('#PIT_1').html(data.board.PIT_1);
+				$('#PIT_2').html(data.board.PIT_2);
+				$('#PIT_3').html(data.board.PIT_3);
+				$('#PIT_4').html(data.board.PIT_4);
+				$('#PIT_5').html(data.board.PIT_5);
+				$('#PIT_6').html(data.board.PIT_6);
+				$('#PIT_7').html(data.board.PIT_7);
+				$('#PIT_8').html(data.board.PIT_8);
+				$('#PIT_9').html(data.board.PIT_9);
+				$('#PIT_10').html(data.board.PIT_10);
+				$('#PIT_11').html(data.board.PIT_11);
+				$('#PIT_12').html(data.board.PIT_12);
+				$('#PIT_13').html(data.board.PIT_13);
+				$('#currentTurn').html(data.currentTurn);
+				
+				var player = $('input[name="player"]:checked').val();
+				if (player === "BOTH") {
+					$('#currentPlayer').attr('value', data.currentTurn);
+					
+					$('#PIT_0').addClass("btn-primary");
+					$('#PIT_1').addClass("btn-primary");
+					$('#PIT_2').addClass("btn-primary");
+					$('#PIT_3').addClass("btn-primary");
+					$('#PIT_4').addClass("btn-primary");
+					$('#PIT_5').addClass("btn-primary");
+					$('#PIT_7').addClass("btn-primary");
+					$('#PIT_8').addClass("btn-primary");
+					$('#PIT_9').addClass("btn-primary");
+					$('#PIT_10').addClass("btn-primary");
+					$('#PIT_11').addClass("btn-primary");
+					$('#PIT_12').addClass("btn-primary");
+					
+				} else {
+					if (player === "NORTH") {
+						$('#PIT_0').attr("disabled",true);
+						$('#PIT_1').attr("disabled",true);
+						$('#PIT_2').attr("disabled",true);
+						$('#PIT_3').attr("disabled",true);
+						$('#PIT_4').attr("disabled",true);
+						$('#PIT_5').attr("disabled",true);
+						$('#PIT_0').addClass("btn-secondary");
+						$('#PIT_1').addClass("btn-secondary");
+						$('#PIT_2').addClass("btn-secondary");
+						$('#PIT_3').addClass("btn-secondary");
+						$('#PIT_4').addClass("btn-secondary");
+						$('#PIT_5').addClass("btn-secondary");
+						$('#PIT_7').addClass("btn-primary");
+						$('#PIT_8').addClass("btn-primary");
+						$('#PIT_9').addClass("btn-primary");
+						$('#PIT_10').addClass("btn-primary");
+						$('#PIT_11').addClass("btn-primary");
+						$('#PIT_12').addClass("btn-primary");
+						
+						if (data.currentTurn === "SOUTH") {
+							$('#PIT_7').attr("disabled",true);
+							$('#PIT_8').attr("disabled",true);
+							$('#PIT_9').attr("disabled",true);
+							$('#PIT_10').attr("disabled",true);
+							$('#PIT_11').attr("disabled",true);
+							$('#PIT_12').attr("disabled",true);
+						} else {
+							$('#PIT_7').attr("disabled",false);
+							$('#PIT_8').attr("disabled",false);
+							$('#PIT_9').attr("disabled",false);
+							$('#PIT_10').attr("disabled",false);
+							$('#PIT_11').attr("disabled",false);
+							$('#PIT_12').attr("disabled",false);
+						}
+					}
+					if (player === "SOUTH") {
+						$('#PIT_7').attr("disabled",true);
+						$('#PIT_8').attr("disabled",true);
+						$('#PIT_9').attr("disabled",true);
+						$('#PIT_10').attr("disabled",true);
+						$('#PIT_11').attr("disabled",true);
+						$('#PIT_12').attr("disabled",true);
+						$('#PIT_0').addClass("btn-primary");
+						$('#PIT_1').addClass("btn-primary");
+						$('#PIT_2').addClass("btn-primary");
+						$('#PIT_3').addClass("btn-primary");
+						$('#PIT_4').addClass("btn-primary");
+						$('#PIT_5').addClass("btn-primary");
+						$('#PIT_7').addClass("btn-secondary");
+						$('#PIT_8').addClass("btn-secondary");
+						$('#PIT_9').addClass("btn-secondary");
+						$('#PIT_10').addClass("btn-secondary");
+						$('#PIT_11').addClass("btn-secondary");
+						$('#PIT_12').addClass("btn-secondary");
+							
+						if (data.currentTurn === "NORTH") {
+							$('#PIT_0').attr("disabled",true);
+							$('#PIT_1').attr("disabled",true);
+							$('#PIT_2').attr("disabled",true);
+							$('#PIT_3').attr("disabled",true);
+							$('#PIT_4').attr("disabled",true);
+							$('#PIT_5').attr("disabled",true);
+						} else {
+							$('#PIT_0').attr("disabled",false);
+							$('#PIT_1').attr("disabled",false);
+							$('#PIT_2').attr("disabled",false);
+							$('#PIT_3').attr("disabled",false);
+							$('#PIT_4').attr("disabled",false);
+							$('#PIT_5').attr("disabled",false);
+						}
+					}
+					
+				}
+				
+			} else {
+				alert(JSON.parse(data).error);
+			}
+		}
+
+        function refreshBoard(){
+            setTimeout(refreshBoard, 1000);
+
+			var gameId = $("#gameId").val();
+			var player = $('input[name="player"]:checked').val();
+
+		   console.log('Checked Game ID: ' + gameId);
+		   console.log('Checked Player: ' + player);
+		   getGame();
+        }
+
+
+</script>
+
+</html>
